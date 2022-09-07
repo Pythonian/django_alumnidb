@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }}{% endblock title %}
+
+{% block content %}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h3 class="mb-2">{{ event.title }}</h3>
+            {% if event.image %}
+            <img class="my-3 img-fluid" src="{{ event.image.url }}">
+            {% endif %}
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Event Info:</h3>
+                    <p>{{ event.description }}</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <h5>When?</h5>
+                            <p class="mb-1"><strong>Date</strong>: {{ event.date|date:"j F, Y" }}</p>
+                            <p><strong>Time</strong>: {{ event.date|time:"P" }}</p>
+                        </div>
+                        <div class="col-lg-4">
+                            <h5>Where?</h5>
+                            <p>{{ event.location }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

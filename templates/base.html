@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %} | UNN Alumni</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+        integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/app.css' %}" />
+    
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <header>
+        <div class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+            <div class="container">
+                <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center">
+                    <strong>UNN Alumni</strong>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler"
+                    aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarToggler">
+                    <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link {% url 'home' as home_url %}{% if request.get_full_path == home_url %}active{% endif %}"
+                                href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% url 'events' as events_url %}{% if request.get_full_path == events_url %}active{% endif %}"
+                                href="{% url 'events' %}">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% url 'jobs' as jobs_url %}{% if request.get_full_path == jobs_url %}active{% endif %}"
+                                href="{% url 'jobs' %}">Jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% url 'forum' as forum_url %}{% if request.get_full_path == forum_url %}active{% endif %}"
+                                href="{% url 'forum' %}">Forum</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                {% if request.user.is_authenticated %}
+                                <li><a class="dropdown-item" href="{# url 'profile' #}">My Profile</a></li>
+                                <li><a class="dropdown-item" href="{# url 'settings' #}">Settings</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                {% else %}
+                                <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+                                <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% include 'partials/_alert.html' %}
+        {% block content %} {% endblock content %}
+    </main>
+
+
+    <footer class="text-white text-center py-5 mt-auto bg-success">
+        <div class="container">
+            <p class="mb-1">&copy;{% now "Y" %} UNN Alumni Association</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+
+</html>
