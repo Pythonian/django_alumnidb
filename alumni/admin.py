@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Event, Job, Spotlight
+from .models import Event, Job
 
 
 @admin.register(Event)
@@ -12,8 +12,3 @@ class EventAdmin(admin.ModelAdmin):
 class JobAdmin(admin.ModelAdmin):
     list_display = ['title', 'company', 'location']
     prepopulated_fields = {'slug': ('title',)}
-
-
-@admin.register(Spotlight)
-class SpotlightAdmin(admin.ModelAdmin):
-    list_display = ['member']

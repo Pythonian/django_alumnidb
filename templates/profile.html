@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="my-5">
+        <div class="d-flex justify-content-between">
+            <h5>{{ user.profile.fullname|default:user }}</h5>
+            {% if user == request.user %}<a href="{% url 'settings' %}" class="btn btn-success btn-sm">Edit profile</a>{% endif %}
+        </div>
+        <hr>
+        <div class="float-end">
+            <img src="{{ user.profile.passport.url }}" class="img-fluid img-thumbnail" width="150px" alt="">
+            <div class="text-center mt-2 text-sm">{{ user.profile.age }} years old.</div>
+        </div>
+
+        <h6 class="text-success my-4">PERSONAL INFO</h6>
+
+        <p><strong>Gender:</strong> {{ user.profile.get_gender_display }}</p>
+        <p><strong>Phone:</strong> {{ user.profile.phonenumber }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Birth date:</strong> {{ user.profile.date_of_birth }}</p>
+        {% if user.profile.location %}<p><strong>Location:</strong> {{ user.profile.location }}</p>{% endif %}
+        {% if user.profile.nationality %}<p><strong>Nationality:</strong> {{ user.profile.nationality }}</p>{% endif %}
+        <p><strong>About me:</strong> {{ user.profile.about }}</p>
+
+        <hr>
+        <h6 class="text-success my-4 my-4">SCHOOL INFO</h6>
+        <p><strong>Department:</strong> {{ user.profile.department }}</p>
+        <p><strong>Faculty:</strong> {{ user.profile.faculty }}</p>
+        <p><strong>Admission session:</strong> {{ user.profile.year_of_admission }}</p>
+        <p><strong>Graduation session:</strong> {{ user.profile.year_of_graduation }}</p>
+        {% if user.profile.project_topic %}<p><strong>Final year project topic:</strong> {{ user.profile.project_topic }}</p>{% endif %}
+        <p><strong>Role while in school:</strong> {% if user.profile.post_held %}{{ user.profile.post_held }}{% else %}None{% endif %}</p>
+        {% if user.profile.memorable_moment %}<p><strong>Memorable moment:</strong> {{ user.profile.memorable_moment }}</p>{% endif %}
+
+        <hr>
+        <a href="{% url 'members' %}" class="btn btn-secondary btn-sm">All members</a>
+    </div>
+</div>
+
+{% endblock content %}

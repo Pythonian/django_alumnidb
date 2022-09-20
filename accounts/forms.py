@@ -7,29 +7,33 @@ from .models import Profile
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
-    department = forms.CharField(max_length=100)
-    year_of_admission = forms.CharField(max_length=100)
-    year_of_graduation = forms.CharField(max_length=100)
-    year_of_birth = forms.DateField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.visible_fields():
             field.help_text = None
 
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = User
-        fields = [
-            'username', 'email',
-            'first_name', 'last_name',
-            'password1', 'password2'
-        ]
+        fields = ['username', 'email', 'password1', 'password2']
 
 
 class ProfileForm(forms.ModelForm):
-
+    
     class Meta:
         model = Profile
-        fields = ['department', 'year_of_admission', 'year_of_graduation', 'year_of_birth']
+        fields = ['fullname', 'date_of_birth', 'phonenumber', 'gender', 'about',
+                  'passport', 'department', 'faculty', 'location', 'nationality',
+                  'year_of_admission', 'year_of_graduation', 'post_held', 'project_topic',
+                  'memorable_moment']
+
+        widgets = {
+            'memorable_moment': forms.Textarea(attrs={'rows': 4}),
+            'about': forms.Textarea(attrs={'rows': 4}),
+            'date_of_birth': forms.DateInput(
+                attrs={
+                    'type': 'date', 
+                    'onkeydown': 'return false',
+                    'min': '1990-01-01',
+                    'max': '2006-12-31'}),
+        }

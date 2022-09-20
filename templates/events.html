@@ -16,7 +16,7 @@
 </header>
 
 <section class="py-5">
-    <div class="container p-5">
+    <div class="container">
         <div class="row">
             {% for event in events %}
             <div class="col-lg-4 col-md-6">
@@ -39,6 +39,7 @@
             <p>No Event record available.</p>
             {% endfor %}
         </div>
+        {% include 'partials/_pagination.html' with page_obj=events %}
     </div>
 </section>
 

@@ -50,15 +50,3 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Spotlight(models.Model):
-    """Alumni spotlight"""
-    member = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    body = models.TextField()
-    image = models.ImageField(upload_to='spotlights')
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['-created']

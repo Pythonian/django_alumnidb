@@ -33,6 +33,7 @@
                             <a class="nav-link {% url 'home' as home_url %}{% if request.get_full_path == home_url %}active{% endif %}"
                                 href="{% url 'home' %}">Home</a>
                         </li>
+                        {% if request.user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link {% url 'events' as events_url %}{% if request.get_full_path == events_url %}active{% endif %}"
                                 href="{% url 'events' %}">Events</a>
@@ -45,13 +46,18 @@
                             <a class="nav-link {% url 'forum' as forum_url %}{% if request.get_full_path == forum_url %}active{% endif %}"
                                 href="{% url 'forum' %}">Forum</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% url 'members' as members_url %}{% if request.get_full_path == members_url %}active{% endif %}"
+                                href="{% url 'members' %}">Members</a>
+                        </li>
+                        {% endif %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">Account</a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 {% if request.user.is_authenticated %}
-                                <li><a class="dropdown-item" href="{# url 'profile' #}">My Profile</a></li>
-                                <li><a class="dropdown-item" href="{# url 'settings' #}">Settings</a></li>
+                                <li><a class="dropdown-item" href="{{ request.user.get_absolute_url }}">My Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                                 {% else %}
                                 <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>

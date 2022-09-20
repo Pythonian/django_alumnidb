@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{% if create %}Create Alumni Profile{% else %}Update Your Profile{% endif %}{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card mt-5">
+                <div class="card-header bg-success text-white">
+                    <h3 class="text-center font-weight-light my-4">{% if create %}Create Alumni Profile{% else %}Update Your Profile{% endif %}</h3>
+                </div>
+                <div class="card-body">
+
+                    <form method="post" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div 1class="card border border-dark p-3 mb-3">
+                            <div class="row">
+                                <div class="col-lg-4">{{ form.fullname|as_crispy_field }}</div>
+                                <div class="col-lg-2">{{ form.phonenumber|as_crispy_field }}</div>
+                                <div class="col-lg-3">{{ form.gender|as_crispy_field }}</div>
+                                <div class="col-lg-3">{{ form.date_of_birth|as_crispy_field }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">{{ form.passport|as_crispy_field }}</div>
+                                <div class="col-lg-4">{{ form.nationality|as_crispy_field }}</div>
+                                <div class="col-lg-4">{{ form.location|as_crispy_field }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">{{ form.faculty|as_crispy_field }}</div>
+                                <div class="col-lg-4">{{ form.department|as_crispy_field }}</div>
+                                <div class="col-lg-2">{{ form.year_of_admission|as_crispy_field }}</div>
+                                <div class="col-lg-2">{{ form.year_of_graduation|as_crispy_field }}</div>
+                                <div class="col-lg-5">{{ form.post_held|as_crispy_field }}</div>
+                                <div class="col-lg-7">{{ form.project_topic|as_crispy_field }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">{{ form.about|as_crispy_field }}</div>
+                                <div class="col-lg-6">{{ form.memorable_moment|as_crispy_field }}</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-success" type="submit">{% if create %}Create Profile{% else %}Update Profile{% endif %}</button>
+                        {% if not create %}<a href="{{ request.user.get_absolute_url }}" class="btn btn-light">Cancel</a>{% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
