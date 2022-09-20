@@ -7,18 +7,29 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from .forms import SignUpForm, ProfileForm
+from .models import Profile
 
 
-class SignUpView(SuccessMessageMixin, CreateView):
-    model = User
-    form_class = SignUpForm
-    template_name = 'registration/register.html'
-    success_message = "Registration successful. Create your Alumni profile."
+def signup(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(
+                request, 'Registration successful. Create your Alumni profile.')
+            return redirect('create_profile')
+        else:
+            messages.warning(
+                request, 'An error occured. Please check below.')
+    else:
+        form = SignUpForm()
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('create_profile')
+    return render(request,
+                  'registration/register.html',
+                  {'form': form})
 
 
 @login_required
@@ -43,12 +54,24 @@ def create_profile(request):
                   {'form': form, 'create': True})
 
 
+@login_required
 def profile(request, username):
+    try:
+        Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        messages.warning(request, 'Please create an Alumni profile.')
+        return redirect('create_profile')
     user = get_object_or_404(User, username=username)
     return render(request, 'profile.html', {'user': user})
 
 
+@login_required
 def settings(request):
+    try:
+        Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        messages.warning(request, 'Please create an Alumni profile.')
+        return redirect('create_profile')
     if request.method == 'POST':
         form = ProfileForm(
             request.POST, request.FILES, instance=request.user.profile)

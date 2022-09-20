@@ -7,6 +7,9 @@ class Faculty(models.Model):
     name = models.CharField(max_length=100)
     slug = models.CharField(max_length=100, unique=True)
 
+    class Meta:
+        verbose_name_plural = 'Faculties'
+
     def __str__(self):
         return self.name
 

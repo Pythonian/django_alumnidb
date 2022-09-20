@@ -17,6 +17,18 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username__iexact=username).exists():
+            raise forms.ValidationError('Username already exists. Try another.')
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError('Email already exists. Try another.')
+        return email
+
 
 class ProfileForm(forms.ModelForm):
     

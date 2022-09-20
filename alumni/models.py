@@ -39,7 +39,7 @@ class Job(models.Model):
     company = models.CharField(max_length=100)
     job_type = models.CharField(max_length=2, choices=JOB_TYPE)
     description = models.TextField()
-    salary = models.CharField(max_length=25)
+    salary = models.CharField(max_length=25, help_text='Eg: 230,000')
     years_of_experience = models.IntegerField()
     location = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
