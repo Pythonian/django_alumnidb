@@ -63,6 +63,9 @@ class Profile(models.Model):
     project_topic = models.CharField(max_length=250, blank=True)
     memorable_moment = models.TextField(blank=True)
 
+    class Meta:
+        ordering = ['fullname']
+
     def __str__(self):
         return self.fullname
 

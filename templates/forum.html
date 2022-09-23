@@ -18,7 +18,36 @@
 <section class="py-5">
     <div class="container">
         <div class="row">
-            <h1>WORK IN PROGRESS...</h1>
+            <!-- Main content -->
+            <div class="col-lg-9 mb-3 mx-lg-auto">
+                {% for board in boards %}
+                <div class="card p-3 mb-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-8 mb-3">
+                            <h5> <a href="{{ board.get_absolute_url }}">{{ board.name }}</a> </h5>
+                            <p>{{ board.description }}</p>
+                            {% if board.get_last_topic %}<p class="mb-0"> Last Topic: <a href="{{ board.topic.get_absolute_url }}">{{ board.get_last_topic }}</a> </p>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-between text-center">
+                                <div class="px-md-1"> 
+                                    <i class="fa-regular fa-clipboard"></i>
+                                    <span class="d-block">{{ board.get_topics_count }} Topic{{ board.get_topics_count|pluralize }}</span> 
+                                </div>
+                                <div class="px-md-1">
+                                    <i class="fa-regular fa-comments"></i>
+                                    <span class="d-block">{{ board.get_replies_count }} Repl{{ board.get_replies_count|pluralize:"y,ies" }}</span>
+                                </div>
+                                <div class="px-md-1"> 
+                                    <i class="fa-regular fa-eye"></i> 
+                                    <span class="d-block">{{ board.views }} View{{ board.views|pluralize }}</span> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </section>

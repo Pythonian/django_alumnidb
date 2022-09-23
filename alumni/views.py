@@ -59,12 +59,6 @@ def job_detail(request, id):
 
 
 @login_required
-def forum(request):
-
-    return render(request, 'forum.html', {})
-
-
-@login_required
 def members(request):
     members = Profile.objects.all()
     members = mk_paginator(request, members, 9)
