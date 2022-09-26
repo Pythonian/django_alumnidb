@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Post a reply{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}">Boards</a></li>
+<li class="breadcrumb-item"><a href="{% url 'board_topics' topic.board.pk %}">{{ topic.board.name }}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'topic_posts' topic.board.pk topic.pk %}">{{ topic.subject }}</a></li>
+<li class="breadcrumb-item active">Post a reply</li>
+{% endblock %}
+
+{% block content %}
+
+<header class="bg-success py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="my-3 text-start text-white">
+                    <h1 class="display-5 fw-bolder">{{ topic.title }}</h1>
+                    <ul class="mt-4 list-inline">
+                        <li class="list-inline-item"><a href="{% url 'board' topic.board.slug %}"
+                                class="text-white">{{ topic.board.name }}</a> &rarr; </li>
+                        <li class="list-inline-item"><a href="{% url 'topic' topic.board.pk topic.pk %}" class="text-white">{{ topic.title }}</a> &rarr;</li>
+                        <li class="list-inline-item">Post a reply</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 mb-3 mx-lg-auto">
+                <form method="post" action="." class="mb-4">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-success">Post a reply</button>
+                </form>
+
+                {% for reply in topic.get_last_ten_replies %}
+                <div class="card mb-2 border-success">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>
+                                Reply by: <strong class="text-muted">{{ reply.created_by.username|title }}</strong>
+                            </div>
+                            <div>
+                                <small class="text-muted">{{ reply.created }}</small>
+                            </div>
+                        </div>
+                        {{ reply.body }}
+                    </div>
+                </div>
+                {% empty %} 
+                <p>No replies yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

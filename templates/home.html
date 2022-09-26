@@ -47,7 +47,7 @@
             <div class="col-lg-7">
                 <h3>Become a Member</h3>
                 <p class="mb-4">If you are an alumni and would like to be added to our membership list, please update your information so you don't miss out on our upcoming events.</p>
-                <a href="{% url 'register' %}" class="btn btn-success">Get started</a>
+                <a href="{% if request.user.is_authenticated %}{{ request.user.get_absolute_url }}{% else %}{% url 'register' %}{% endif %}" class="btn btn-success">Get started</a>
             </div>
             <div class="col-lg-5">
                 <div class="card">
@@ -66,6 +66,5 @@
         </div>
     </div>
 </section>
-
 
 {% endblock content %}

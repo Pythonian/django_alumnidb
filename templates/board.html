@@ -21,9 +21,9 @@
 <section class="py-5">
     <div class="container">
         <div class="row">
-            <!-- Main content -->
             <div class="col-lg-9 mb-3">
-                <a class="btn btn-lg btn-success mb-5" href="#">New Topic</a>
+                <a class="btn btn-lg btn-success mb-5" href="{% url 'new_topic' board.pk %}">New Topic</a>
+                <a class="btn btn-light mb-5" href="{% url 'forum' %}">Back to Forum</a>
                 {% for topic in topics %}
                 {% url 'topic' board.pk topic.pk as topic_url %}
                     <div class="card p-3 mb-3 bg-light">
@@ -31,6 +31,7 @@
                             <div class="col-md-8 mb-3 mb-sm-0">
                                 <h5> <a href="{{ topic_url }}">{{ topic.title }}</a> </h5>
                                 <p> Thread started by <a href="{{ topic.author.get_absolute_url }}">{{ topic.author.username }}</a> {{ topic.created|naturaltime }} </p>
+                                {% if topic.get_page_count > 0 %}
                                 <div>
                                     Pages:
                                     {% for i in topic.get_page_range %}
@@ -40,16 +41,17 @@
                                     ... <a class="me-2" href="{{ topic_url }}?page={{ topic.get_page_count }}">Last Page</a>
                                     {% endif %}
                                 </div>
+                                {% endif %}
                             </div>
                             <div class="col-md-4">
                                 <div class="row text-center">
                                     <div class="col-3 px-1">
                                         <i class="fa-regular fa-comments"></i>
-                                        <span class="d-block ">{{ topic.replies.count }} Replies</span>
+                                        <span class="d-block ">{{ topic.replies.count }} Repl{{ topic.replies.count|pluralize:"y,ies" }}</span>
                                     </div>
                                     <div class="col-3 px-1">
                                         <i class="fa-regular fa-eye"></i>
-                                        <span class="d-block ">{{ topic.views }} Views</span>
+                                        <span class="d-block ">{{ topic.views }} View{{ topic.views|pluralize }}</span>
                                     </div>
                                     <div class="col-6 px-1">
                                         <i class="fa-regular fa-clock"></i>
@@ -72,7 +74,7 @@
                     {% for topic in popular_topics %}
                     <div class="pb-3 mb-3 border-bottom">
                         <h6> <a href="{% url 'topic' board.pk topic.pk %}">{{ topic.title }}</a> </h6>
-                        <small>Created by <a href="{{ topic.author.get_absolute_url }}">{{ topic.author.username }}</a> {{ topic.created|naturaltime }}</small>
+                        <small>Created by <a href="{{ topic.author.get_absolute_url }}">{{ topic.author.username }}</a> | {{ topic.created|naturaltime }}</small>
                     </div>
                     {% endfor %}
                     {% else %}

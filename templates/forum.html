@@ -18,15 +18,20 @@
 <section class="py-5">
     <div class="container">
         <div class="row">
-            <!-- Main content -->
             <div class="col-lg-9 mb-3 mx-lg-auto">
                 {% for board in boards %}
                 <div class="card p-3 mb-3">
                     <div class="row align-items-center">
                         <div class="col-md-8 mb-3">
-                            <h5> <a href="{{ board.get_absolute_url }}">{{ board.name }}</a> </h5>
+                            <h5> <a href="{{ board.get_absolute_url }}" class="text-success">{{ board.name }}</a> </h5>
                             <p>{{ board.description }}</p>
-                            {% if board.get_last_topic %}<p class="mb-0"> Last Topic: <a href="{{ board.topic.get_absolute_url }}">{{ board.get_last_topic }}</a> </p>{% endif %}
+                            {% with topic=board.get_last_topic %}
+                                {% if topic %}
+                                <p class="mb-0"> Last Topic: 
+                                    <a class="text-success" href="{% url 'topic' board.pk topic.pk %}">{{ topic.title }}</a> 
+                                </p>
+                                {% endif %}
+                            {% endwith %}
                         </div>
                         <div class="col-md-4">
                             <div class="d-flex justify-content-between text-center">

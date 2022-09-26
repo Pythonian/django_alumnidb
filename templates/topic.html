@@ -25,43 +25,48 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                    <div class="mb-4">
-                        <a href="{# url 'reply_topic' topic.board.pk topic.pk #}" class="btn btn-primary" role="button">Reply</a>
-                    </div>
-                    
-                    {% for reply in replies %}
-                    <div id="{{ reply.pk }}"
-                        class="card {% if forloop.last %}mb-4{% else %}mb-2{% endif %} {% if forloop.first %}border-dark{% endif %}">
-                        {% if forloop.first %}
-                        <div class="card-header text-white bg-dark py-2 px-3">{{ topic.title }}</div>
-                        {% endif %}
-                        <div class="card-body p-3">
-                            <div class="row">
-                                <div class="col-2">
-                                    <img src="{{ reply.created_by.profile.passport.url }}" width="100px" height="100px" alt="{{ reply.created_by.username }}" class="img-fluid">
-                                    <small class="d-block">Replies: {{ reply.created_by.replies.count }}</small>
+                <div class="card mb-2 border-success">
+                    <div class="card-header text-white bg-success py-2 px-3">{{ topic.title }}</div>
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-1">
+                                <img src="{{ topic.author.profile.passport.url }}" width="200px" height="200px"
+                                    alt="{{ topic.author.username }}" class="img-fluid mb-2">
+                                <small class="d-block text-center">Replies: {{ topic.author.replies.count }}</small>
+                            </div>
+                            <div class="col-11">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div class="fw-bold">Topic started by: <a href="{{ topic.author.get_absolute_url }}" class="text-success">{{ topic.author.username|title }}</a></div>
+                                    <small class="text-muted">{{ topic.created }}</small>
                                 </div>
-                                <div class="col-10">
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <strong class="text-muted">{{ reply.created_by.username }}</strong>
-                                        </div>
-                                        <div class="col-6 text-right">
-                                            <small class="text-muted">{{ reply.created }}</small>
-                                        </div>
-                                    </div>
-                                    {{ reply.body }}
-                                    {% if reply.created_by == user %}
-                                    <div class="mt-3">
-                                        <a href="{# url 'edit_reply' reply.topic.board.pk reply.topic.pk reply.pk #}"
-                                            class="btn btn-primary btn-sm" role="button">Edit</a>
-                                    </div>
-                                    {% endif %}
-                                </div>
+                                {{ topic.body }}
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <a href="{% url 'reply_topic' topic.board.pk topic.pk %}" class="btn btn-success" role="button">Reply this topic</a>
+                </div>
+                
+                {% for reply in replies %}
+                <div id="{{ reply.pk }}" class="card mb-2 border-success">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-1">
+                                <img src="{{ reply.created_by.profile.passport.url }}" width="200px" height="200px" alt="{{ reply.created_by.username }}" class="img-fluid mb-2">
+                                <small class="d-block text-center">Replies: {{ reply.created_by.replies.count }}</small>
+                            </div>
+                            <div class="col-11">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div class="fw-bold"><a href="{{ reply.created_by.get_absolute_url }}" class="text-success text-decoration-none">{{ reply.created_by.username|title }}</a></div>
+                                    <small class="text-muted">{{ reply.created }}</small>
+                                </div>
+                                {{ reply.body }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
 
             </div>
         </div>

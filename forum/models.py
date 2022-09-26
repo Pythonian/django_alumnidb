@@ -49,13 +49,13 @@ class Topic(models.Model):
 
     def get_page_count(self):
         count = self.replies.count()
-        pages = count / 2
+        pages = count / 20
         return math.ceil(pages)
 
     def has_many_pages(self, count=None):
         if count is None:
             count = self.get_page_count()
-        return count > 2
+        return count > 6
 
     def get_page_range(self):
         count = self.get_page_count()

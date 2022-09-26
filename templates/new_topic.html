@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Start a New Topic{% endblock %}
+
+{% block content %}
+
+<header class="bg-success py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="my-3 text-center">
+                    <h1 class="display-5 fw-bolder text-white">Start a New Topic</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 mb-3 mx-lg-auto">
+                <form method="post" action=".">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    <a href="{% url 'board' board.slug %}" class="btn btn-light">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

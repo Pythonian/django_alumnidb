@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 
-# from .forms import NewTopicForm, PostForm
+from .forms import NewTopicForm, ReplyForm
 from .models import Board, Topic, Reply
 
 
@@ -33,12 +33,12 @@ def forum(request):
     return render(request, 'forum.html', {'boards': boards})
 
 
+@login_required
 def board(request, slug):
     board = get_object_or_404(Board, slug=slug)
-    # Return the count of posts for a given topic.
-    # Exclude starter topic
+    # Return the count of replies for a given topic.
     topics = board.topics.order_by(
-        '-created').annotate(replies_count=Count('replies') - 1)
+        '-created').annotate(replies_count=Count('replies'))
     topics = mk_paginator(request, topics, 20)
     popular_topics = board.topics.order_by('-views')[:3]
 
@@ -52,27 +52,23 @@ def board(request, slug):
     return render(request, 'board.html', {'board': board, 'topics': topics, 'popular_topics': popular_topics})
 
 
-# @login_required
-# def new_topic(request, pk):
-#     board = get_object_or_404(Board, pk=pk)
-#     if request.method == 'POST':
-#         form = NewTopicForm(request.POST)
-#         if form.is_valid():
-#             topic = form.save(commit=False)
-#             topic.board = board
-#             topic.starter = request.user
-#             topic.save()
-#             Post.objects.create(
-#                 message=form.cleaned_data.get('message'),
-#                 topic=topic,
-#                 created_by=request.user
-#             )
-#             return redirect('topic', pk=pk, topic_pk=topic.pk)
-#     else:
-#         form = NewTopicForm()
-#     return render(request, 'new_topic.html', {'board': board, 'form': form})
+@login_required
+def new_topic(request, pk):
+    board = get_object_or_404(Board, pk=pk)
+    if request.method == 'POST':
+        form = NewTopicForm(request.POST)
+        if form.is_valid():
+            topic = form.save(commit=False)
+            topic.board = board
+            topic.author = request.user
+            topic.save()
+            return redirect('topic', pk=pk, topic_pk=topic.pk)
+    else:
+        form = NewTopicForm()
+    return render(request, 'new_topic.html', {'board': board, 'form': form})
 
 
+@login_required
 def topic(request, pk, topic_pk):
     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
     replies = topic.replies.order_by('created')
@@ -94,49 +90,29 @@ def topic(request, pk, topic_pk):
     return render(request, template, context)
 
 
-# @login_required
-# def reply_topic(request, pk, topic_pk):
-#     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
-#     if request.method == 'POST':
-#         form = PostForm(request.POST)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             post.topic = topic
-#             post.created_by = request.user
-#             post.save()
+@login_required
+def reply_topic(request, pk, topic_pk):
+    topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
+    if request.method == 'POST':
+        form = ReplyForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.topic = topic
+            reply.created_by = request.user
+            reply.save()
 
-#             topic.last_updated = timezone.now()
-#             topic.save()
+            topic.updated = timezone.now()
+            topic.save()
 
-#             topic_url = reverse('topic', kwargs={
-#                                 'pk': pk, 'topic_pk': topic_pk})
-#             topic_post_url = '{url}?page={page}#{id}'.format(
-#                 url=topic_url,
-#                 id=post.pk,
-#                 page=topic.get_page_count()
-#             )
-#             # Sends user to the last page
-#             return redirect(topic_post_url)
-#     else:
-#         form = PostForm()
-#     return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
-
-
-# @login_required
-# def edit_post(request, pk, topic_pk, post_pk):
-#     post = get_object_or_404(Post, topic__board__pk=pk,
-#                              topic__pk=topic_pk, pk=post_pk)
-#     if not request.user == post.created_by:
-#         raise Http404
-#     if request.method == 'POST':
-#         form = PostForm(request.POST, instance=post)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             post.updated_by = request.user
-#             post.updated_at = timezone.now()
-#             post.save()
-#             return redirect('topic', pk=post.topic.board.pk, topic_pk=post.topic.pk)
-#     else:
-#         form = PostForm(instance=post)
-#     return render(request, 'edit_post.html',
-#                   {'post': post, 'form': form})
+            topic_url = reverse('topic', kwargs={
+                                'pk': pk, 'topic_pk': topic_pk})
+            topic_reply_url = '{url}?page={page}#{id}'.format(
+                url=topic_url,
+                id=reply.pk,
+                page=topic.get_page_count()
+            )
+            # Sends user to the last page
+            return redirect(topic_reply_url)
+    else:
+        form = ReplyForm()
+    return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
