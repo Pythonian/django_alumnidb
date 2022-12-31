@@ -15,4 +15,5 @@ class FacultyAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['fullname', 'department']
+    list_filter = ['department']

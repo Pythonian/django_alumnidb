@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'crispy_forms',
     'crispy_bootstrap5',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -155,4 +156,8 @@ TIME_INPUT_FORMATS = ('%I:%M %p',)
 
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: reverse_lazy('profile', args=[u.username])
+}
+
+GRAPH_MODELS = {
+    'app_labels': ["alumni", "account", "forum"],
 }

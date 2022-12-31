@@ -23,9 +23,6 @@ class Board(models.Model):
     def get_absolute_url(self):
         return reverse('board', kwargs={'slug': self.slug})
 
-    # def get_last_reply(self):
-    #     return Reply.objects.filter(topic__board=self).order_by('-created').first()
-
     def get_last_topic(self):
         return Topic.objects.filter(board=self).order_by('-created').first()
 

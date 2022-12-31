@@ -72,13 +72,3 @@ class Profile(models.Model):
     def age(self):
         today = date.today()
         return today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
-
-# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-# def create_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Profile.objects.create(user=instance)
-
-
-# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-# def save_profile(sender, instance, **kwargs):
-#     instance.profile.save()
